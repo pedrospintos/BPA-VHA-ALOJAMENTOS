@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alojamento de Trânsito - BPA</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+
+    <!-- CABEÇALHO ORIGINAL -->
+    <header class="bg-slate-950 border-b border-emerald-800/40 sticky top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-emerald-700 p-2.5 rounded-lg text-white shadow-md">
+                    <i class="fa-solid fa-shield-halved text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-wide text-emerald-400">BPA - POLÍCIA AMBIENTAL</h1>
+                    <p class="text-xs text-slate-400 font-medium">Sistema de Gestão de Alojamento de Trânsito</p>
+                </div>
+            </div>
+            
+            <div id="userInfoHeader" class="hidden flex items-center space-x-4">
+                <div class="text-right hidden sm:block">
+                    <p id="headerName" class="text-sm font-semibold text-slate-200">Militar</p>
+                    <p class="text-xs text-emerald-400">Mat: <span id="headerMat">00000</span></p>
+                </div>
+                <button onclick="logout()" class="bg-rose-900/80 hover:bg-rose-800 text-rose-200 text-xs font-semibold px-3 py-2 rounded-lg transition border border-rose-700/50 flex items-center gap-1.5">
+                    <i class="fa-solid fa-right-from-bracket"></i> Sair
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6">
+
+        <!-- TELA DE LOGIN / CADASTRO -->
+        <section id="authScreen" class="max-w-md mx-auto mt-8 bg-slate-950 border border-slate-800 p-8 rounded-2xl shadow-2xl">
+            <div class="text-center mb-6">
+                <div class="inline-flex bg-emerald-950 border border-emerald-800/60 p-4 rounded-full text-emerald-400 mb-3 shadow-inner">
+                    <i class="fa-solid fa-bed text-3xl"></i>
+                </div>
+                <h2 class="text-xl font-bold text-white">Alojamento de Trânsito</h2>
+                <p class="text-xs text-slate-400 mt-1">Insira seus dados funcionais para acessar o sistema de reservas</p>
+            </div>
+
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Nome Completo de Guerra</label>
+                    <input type="text" id="loginName" required placeholder="Ex: Sgt Silva" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-emerald-500 transition">
+                </div>
+
+                <!-- Posto / Graduação com Ícone -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1 flex items-center gap-1.5">
+                        <i class="fa-solid fa-medal text-emerald-400"></i> Posto / Graduação
+                    </label>
+                    <select id="loginPosto" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-emerald-500 transition">
+                        <option value="" disabled selected>Selecione o Posto/Graduação</option>
+                        <option value="Coronel">Coronel</option>
+                        <option value="Tenente-Coronel">Tenente-Coronel</option>
+                        <option value="Major">Major</option>
+                        <option value="Capitão">Capitão</option>
+                        <option value="1º Tenente">1º Tenente</option>
+                        <option value="2º Tenente">2º Tenente</option>
+                        <option value="Aspirante">Aspirante</option>
+                        <option value="Subtenente">Subtenente</option>
+                        <option value="1º Sargento">1º Sargento</option>
+                        <option value="2º Sargento">2º Sargento</option>
+                        <option value="3º Sargento">3º Sargento</option>
+                        <option value="Cabo">Cabo</option>
+                        <option value="Soldado">Soldado</option>
+                    </select>
+                </div>
+
+                <!-- Unidade / Lotação com Ícone -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1 flex items-center gap-1.5">
+                        <i class="fa-solid fa-building-shield text-emerald-400"></i> Unidade / Lotação
+                    </label>
+                    <select id="loginUnidade" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-emerald-500 transition">
+                        <option value="" disabled selected>Selecione a Unidade/Lotação</option>
+                        <option value="BPA">BPA</option>
+                        <option value="SEDAM">SEDAM</option>
+                        <option value="IBAMA">IBAMA</option>
+                        <option value="ICMBIO">ICMBIO</option>
+                        <option value="BPRON">BPRON</option>
+                        <option value="BOPE">BOPE</option>
+                        <option value="BPTRAN">BPTRAN</option>
+                        <option value="NOA">NOA</option>
+                        <option value="PM">PM</option>
+                        <option value="OUTROS ORGÃOS">OUTROS ORGÃOS</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Matrícula (para reservas)</label>
+                    <input type="text" id="loginMatricula" required placeholder="Ex: 12345-6" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-emerald-500 transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">CPF</label>
+                    <input type="text" id="loginCpf" required placeholder="000.000.000-00" oninput="maskCpf(this)" maxlength="14" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-emerald-500 transition">
+                </div>
+                <div class="pt-2">
+                    <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-600 font-semibold py-3 rounded-xl text-white shadow-lg transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i> Acessar Sistema
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- PAINEL PRINCIPAL DO USUÁRIO -->
+        <section id="dashboardScreen" class="hidden space-y-6">
+            
+            <!-- Abas de Navegação -->
+            <div class="flex flex-wrap gap-2 border-b border-slate-800 pb-3">
+                <button onclick="switchTab('bases')" id="tabBases" class="bg-emerald-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2 shadow">
+                    <i class="fa-solid fa-building"></i> Localidades & Beliches
+                </button>
+                <button onclick="switchTab('myReservas')" id="tabMyReservas" class="bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2">
+                    <i class="fa-solid fa-clipboard-list"></i> Minhas Reservas
+                </button>
+                <button onclick="switchTab('admin')" id="tabAdmin" class="bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2">
+                    <i class="fa-solid fa-lock"></i> Painel Geral (Admin)
+                </button>
+            </div>
+
+            <!-- ABA 1: LOCALIDADES E BELICHES (VHA, JIPA, SEDE, AFO, MDO) -->
+            <div id="contentBases" class="space-y-6">
+                <div class="bg-slate-950 border border-slate-800 p-5 rounded-2xl shadow-lg">
+                    <h3 class="text-base font-bold text-white mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-map-location-dot text-emerald-400"></i> Selecione a Base de Destino
+                    </h3>
+                    <p class="text-xs text-slate-400 mb-4">Escolha abaixo a localidade desejada (5 Beliches / 10 Leitos por base):</p>
+                    
+                    <!-- Seletor de Base -->
+                    <div id="baseButtons" class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                        <!-- Gerado por JS -->
+                    </div>
+                </div>
+
+                <!-- Detalhes dos Beliches da Base Selecionada -->
+                <div class="bg-slate-950 border border-slate-800 p-5 rounded-2xl shadow-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <h4 id="selectedBaseTitle" class="text-lg font-bold text-emerald-400">Base: VHA</h4>
+                        <span class="text-xs bg-emerald-950 border border-emerald-800/60 text-emerald-300 px-3 py-1 rounded-full font-medium">5 Beliches (Leito de Baixo / Leito de Cima)</span>
+                    </div>
+                    
+                    <div id="belichesContainer" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                        <!-- Gerado por JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABA 2: MINHAS RESERVAS -->
+            <div id="contentMyReservas" class="hidden space-y-4">
+                <div class="bg-slate-950 border border-slate-800 p-5 rounded-2xl shadow-lg">
+                    <h3 class="text-base font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-emerald-400"></i> Suas Reservas Cadastradas
+                    </h3>
+                    <div id="myReservasList" class="space-y-3">
+                        <!-- Gerado por JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABA 3: PAINEL ADMINISTRATIVO -->
+            <div id="contentAdmin" class="hidden space-y-4">
+                <div class="bg-slate-950 border border-slate-800 p-5 rounded-2xl shadow-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-base font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-shield-cat text-emerald-400"></i> Controle Geral de Ocupação (Todas as Bases)
+                        </h3>
+                        <button onclick="renderAdmin()" class="bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 px-3 py-1.5 rounded-lg transition">
+                            <i class="fa-solid fa-rotate"></i> Atualizar
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-900 text-slate-400 uppercase tracking-wider border-b border-slate-800">
+                                <tr>
+                                    <th class="p-3">Localidade</th>
+                                    <th class="p-3">Beliche / Leito</th>
+                                    <th class="p-3">Militar</th>
+                                    <th class="p-3">Posto/Grad</th>
+                                    <th class="p-3">Unidade</th>
+                                    <th class="p-3">Matrícula</th>
+                                    <th class="p-3">Motivo / Missão</th>
+                                    <th class="p-3">Período</th>
+                                    <th class="p-3">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminTableBody" class="divide-y divide-slate-800/60 text-slate-300">
+                                <!-- Gerado por JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- MODAL DE RESERVA -->
+    <div id="reservaModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <h3 class="text-lg font-bold text-white mb-1">Efetuar Reserva de Leito</h3>
+            <p id="modalSubTitle" class="text-xs text-emerald-400 mb-4">Base VHA - Beliche 1 (Leito de Baixo)</p>
+
+            <form id="reservaForm" onsubmit="confirmReserva(event)" class="space-y-4">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Check-in (Data)</label>
+                        <input type="date" id="checkinDate" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Hora de Chegada</label>
+                        <input type="time" id="checkinTime" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-emerald-500">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Check-out (Data)</label>
+                        <input type="date" id="checkoutDate" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Hora de Saída</label>
+                        <input type="time" id="checkoutTime" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-emerald-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Motivo / Missão</label>
+                    <select id="motivoMissao" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-emerald-500 transition">
+                        <option value="" disabled selected>Selecione o motivo...</option>
+                        <option value="Curso / Instrução">Curso / Instrução</option>
+                        <option value="Deslocamento Administrativo / Reunião">Deslocamento Administrativo / Reunião</option>
+                        <option value="Operação Conjunta / Apoio Externo">Operação Conjunta / Apoio Externo</option>
+                        <option value="Assuntos Particulares">Assuntos Particulares</option>
+                    </select>
+                </div>
+
+                <div class="pt-2 flex gap-2">
+                    <button type="button" onclick="closeModal()" class="w-1/2 bg-slate-800 hover:bg-slate-700 text-slate-300 py-2.5 rounded-xl text-xs font-semibold transition">Cancelar</button>
+                    <button type="submit" class="w-1/2 bg-emerald-700 hover:bg-emerald-600 text-white py-2.5 rounded-xl text-xs font-semibold transition shadow">Confirmar Reserva</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SCRIPT DE LÓGICA -->
+    <script>
+        const BASES = ["VHA", "JIPA", "SEDE", "AFO", "MDO"];
+        let currentBase = "VHA";
+        let currentUser = null;
+        let selectedBedData = null;
+
+        let reservas = JSON.parse(localStorage.getItem('bpa_reservas')) || [];
+
+        // Função estrita de limpeza automática de reservas expiradas por Data/Hora de Check-out
+        function limparReservasExpiradas() {
+            const agora = new Date();
+            let alterado = false;
+
+            reservas = reservas.filter(r => {
+                // Combina a data e hora de check-out em um objeto Date válido para comparação exata
+                const checkoutDateTime = new Date(`${r.checkoutDate}T${r.checkoutTime}:00`);
+                
+                // Se a data/hora atual for maior que o check-out, a reserva expirou e o leito deve ser liberado
+                if (agora >= checkoutDateTime) {
+                    alterado = true;
+                    return false; 
+                }
+                return true;
+            });
+
+            if (alterado) {
+                localStorage.setItem('bpa_reservas', JSON.stringify(reservas));
+            }
+        }
+
+        // Executa a verificação imediatamente e em tempo real a cada 5 segundos
+        limparReservasExpiradas();
+        setInterval(() => {
+            limparReservasExpiradas();
+            // Se o usuário estiver visualizando as telas de leitos, minhas reservas ou admin, atualiza a interface dinamicamente
+            if (currentUser) {
+                if (!document.getElementById('contentBases').classList.contains('hidden')) renderBeliches();
+                if (!document.getElementById('contentMyReservas').classList.contains('hidden')) renderMyReservas();
+                if (!document.getElementById('contentAdmin').classList.contains('hidden')) renderAdmin();
+            }
+        }, 5000);
+
+        function maskCpf(input) {
+            let value = input.value.replace(/\D/g, "");
+            if (value.length > 11) value = value.slice(0, 11);
+            value = value.replace(/(\d{3})(\d)/, "$1.$2");
+            value = value.replace(/(\d{3})(\d)/, "$1.$2");
+            value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+            input.value = value;
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            limparReservasExpiradas();
+            const name = document.getElementById('loginName').value.trim();
+            const posto = document.getElementById('loginPosto').value;
+            const unidade = document.getElementById('loginUnidade').value;
+            const matricula = document.getElementById('loginMatricula').value.trim();
+            const cpf = document.getElementById('loginCpf').value.trim();
+
+            currentUser = { name, posto, unidade, matricula, cpf };
+            
+            document.getElementById('headerName').innerText = `${posto} ${name}`;
+            document.getElementById('headerMat').innerText = matricula;
+            
+            document.getElementById('authScreen').classList.add('hidden');
+            document.getElementById('dashboardScreen').classList.remove('hidden');
+            document.getElementById('userInfoHeader').classList.remove('hidden');
+
+            renderBasesNav();
+            renderBeliches();
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('loginForm').reset();
+            document.getElementById('authScreen').classList.remove('hidden');
+            document.getElementById('dashboardScreen').classList.add('hidden');
+            document.getElementById('userInfoHeader').classList.add('hidden');
+        }
+
+        function switchTab(tab) {
+            limparReservasExpiradas();
+            document.getElementById('contentBases').classList.add('hidden');
+            document.getElementById('contentMyReservas').classList.add('hidden');
+            document.getElementById('contentAdmin').classList.add('hidden');
+
+            document.getElementById('tabBases').className = "bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2";
+            document.getElementById('tabMyReservas').className = "bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2";
+            document.getElementById('tabAdmin').className = "bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2";
+
+            if (tab === 'bases') {
+                document.getElementById('contentBases').classList.remove('hidden');
+                document.getElementById('tabBases').className = "bg-emerald-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2 shadow";
+                renderBeliches();
+            } else if (tab === 'myReservas') {
+                document.getElementById('contentMyReservas').classList.remove('hidden');
+                document.getElementById('tabMyReservas').className = "bg-emerald-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2 shadow";
+                renderMyReservas();
+            } else if (tab === 'admin') {
+                document.getElementById('contentAdmin').classList.remove('hidden');
+                document.getElementById('tabAdmin').className = "bg-emerald-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2 shadow";
+                renderAdmin();
+            }
+        }
+
+        function renderBasesNav() {
+            const container = document.getElementById('baseButtons');
+            container.innerHTML = "";
+            BASES.forEach(base => {
+                const isActive = base === currentBase;
+                container.innerHTML += `
+                    <button onclick="changeBase('${base}')" class="py-3 px-4 rounded-xl text-xs font-bold transition border ${isActive ? 'bg-emerald-700 border-emerald-600 text-white shadow-md' : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'}">
+                        <i class="fa-solid fa-campground block mb-1 text-base"></i> ${base}
+                    </button>
+                `;
+            });
+        }
+
+        function changeBase(base) {
+            currentBase = base;
+            document.getElementById('selectedBaseTitle').innerText = `Base: ${base}`;
+            renderBasesNav();
+            renderBeliches();
+        }
+
+        function renderBeliches() {
+            limparReservasExpiradas();
+            const container = document.getElementById('belichesContainer');
+            container.innerHTML = "";
+
+            for (let i = 1; i <= 5; i++) {
+                ['Baixo', 'Cima'].forEach(posicao => {
+                    const bedId = `${currentBase}-B${i}-${posicao}`;
+                    const labelPosicao = posicao === 'Baixo' ? 'LEITO DE BAIXO' : 'LEITO DE CIMA';
+                    const reserva = reservas.find(r => r.bedId === bedId);
+                    const isOcupado = !!reserva;
+
+                    container.innerHTML += `
+                        <div class="bg-slate-900 border ${isOcupado ? 'border-rose-900/60 bg-rose-950/10' : 'border-slate-800'} p-4 rounded-xl flex flex-col justify-between shadow">
+                            <div>
+                                <div class="flex justify-between items-start mb-2 gap-1">
+                                    <span class="text-xs font-bold text-slate-200">Beliche ${i}</span>
+                                    <span class="text-[9px] font-bold px-2 py-0.5 rounded ${posicao === 'Baixo' ? 'bg-blue-950 text-blue-300 border border-blue-800/50' : 'bg-purple-950 text-purple-300 border border-purple-800/50'}">${labelPosicao}</span>
+                                </div>
+                                ${isOcupado ? `
+                                    <div class="text-[11px] text-slate-300 space-y-1 mb-3">
+                                        <p class="font-semibold text-rose-300"><i class="fa-solid fa-user-lock"></i> ${reserva.posto}${reserva.nome}</p>
+                                        <p class="text-slate-400">Unidade: ${reserva.unidade}</p>
+                                        <p class="text-slate-400">Mat: ${reserva.matricula}</p>
+                                        <p class="text-slate-400 text-[10px]"><b>Motivo:</b> ${reserva.motivoMissao}</p>
+                                        <p class="text-[10px] text-slate-400">Início: ${reserva.checkinDate} às ${reserva.checkinTime}</p>
+                                        <p class="text-[10px] text-slate-400">Fim: ${reserva.checkoutDate} às ${reserva.checkoutTime}</p>
+                                    </div>
+                                ` : `
+                                    <p class="text-xs text-emerald-400 font-medium my-3"><i class="fa-solid fa-circle-check"></i> Disponível</p>
+                                `}
+                            </div>
+                            <div>
+                                ${isOcupado ? (reserva.matricula === currentUser.matricula ? `
+                                    <button onclick="cancelReserva('${bedId}')" class="w-full bg-rose-900/80 hover:bg-rose-800 text-rose-200 text-xs py-1.5 rounded-lg transition">Cancelar</button>
+                                ` : `
+                                    <button disabled class="w-full bg-slate-800 text-slate-500 text-xs py-1.5 rounded-lg cursor-not-allowed">Ocupado</button>
+                                `) : `
+                                    <button onclick="openModal('${currentBase}', ${i}, '${posicao}')" class="w-full bg-emerald-700 hover:bg-emerald-600 text-white text-xs py-1.5 rounded-lg transition shadow">Reservar</button>
+                                `}
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        function openModal(base, belicheNum, posicao) {
+            const labelPosicao = posicao === 'Baixo' ? 'LEITO DE BAIXO' : 'LEITO DE CIMA';
+            selectedBedData = { base, bedId: `${base}-B${belicheNum}-${posicao}`, desc: `Base ${base} - Beliche ${belicheNum} (${labelPosicao})` };
+            document.getElementById('modalSubTitle').innerText = selectedBedData.desc;
+            document.getElementById('reservaModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('reservaModal').classList.add('hidden');
+            document.getElementById('reservaForm').reset();
+            selectedBedData = null;
+        }
+
+        function confirmReserva(e) {
+            e.preventDefault();
+            const checkinDate = document.getElementById('checkinDate').value;
+            const checkinTime = document.getElementById('checkinTime').value;
+            const checkoutDate = document.getElementById('checkoutDate').value;
+            const checkoutTime = document.getElementById('checkoutTime').value;
+            const motivoMissao = document.getElementById('motivoMissao').value;
+
+            const novaReserva = {
+                id: Date.now(),
+                base: selectedBedData.base,
+                bedId: selectedBedData.bedId,
+                desc: selectedBedData.desc,
+                nome: currentUser.name,
+                posto: currentUser.posto,
+                unidade: currentUser.unidade,
+                matricula: currentUser.matricula,
+                cpf: currentUser.cpf,
+                checkinDate,
+                checkinTime,
+                checkoutDate,
+                checkoutTime,
+                motivoMissao
+            };
+
+            reservas.push(novaReserva);
+            localStorage.setItem('bpa_reservas', JSON.stringify(reservas));
+
+            closeModal();
+            renderBeliches();
+            alert("Reserva efetuada com sucesso!");
+        }
+
+        function renderMyReservas() {
+            limparReservasExpiradas();
+            const container = document.getElementById('myReservasList');
+            const minhas = reservas.filter(r => r.matricula === currentUser.matricula);
+
+            if (minhas.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 italic">Você não possui reservas ativas no momento.</p>`;
+                return;
+            }
+
+            container.innerHTML = "";
+            minhas.forEach(r => {
+                container.innerHTML += `
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                        <div class="space-y-1">
+                            <span class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-bed"></i> ${r.desc}</span>
+                            <p class="text-xs text-slate-300"><b>Motivo / Missão:</b> ${r.motivoMissao}</p>
+                            <p class="text-xs text-slate-400"><b>Período:</b> De ${r.checkinDate} (${r.checkinTime}) até ${r.checkoutDate} (${r.checkoutTime})</p>
+                        </div>
+                        <button onclick="cancelReserva('${r.bedId}')" class="bg-rose-900/80 hover:bg-rose-800 text-rose-200 text-xs px-3 py-1.5 rounded-lg transition">Cancelar Reserva</button>
+                    </div>
+                `;
+            });
+        }
+
+        function cancelReserva(bedId) {
+            if (confirm("Tem certeza que deseja cancelar esta reserva?")) {
+                reservas = reservas.filter(r => r.bedId !== bedId);
+                localStorage.setItem('bpa_reservas', JSON.stringify(reservas));
+                renderBeliches();
+                if(!document.getElementById('contentMyReservas').classList.contains('hidden')) {
+                    renderMyReservas();
+                }
+                if(!document.getElementById('contentAdmin').classList.contains('hidden')) {
+                    renderAdmin();
+                }
+            }
+        }
+
+        function renderAdmin() {
+            limparReservasExpiradas();
+            const tbody = document.getElementById('adminTableBody');
+            if (reservas.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" class="p-4 text-center text-slate-400 italic">Nenhuma reserva registrada no sistema.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = "";
+            reservas.forEach(r => {
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-900/50 transition">
+                        <td class="p-3 font-semibold text-emerald-400">${r.base}</td>
+                        <td class="p-3">${r.desc.split('- ')[1] || r.desc}</td>
+                        <td class="p-3 font-medium text-slate-200">${r.nome}</td>
+                        <td class="p-3">${r.posto}</td>
+                        <td class="p-3">${r.unidade}</td>
+                        <td class="p-3">${r.matricula}</td>
+                        <td class="p-3 font-semibold text-emerald-300">${r.motivoMissao}</td>
+                        <td class="p-3">${r.checkinDate} (${r.checkinTime}) ➔ ${r.checkoutDate} (${r.checkoutTime})</td>
+                        <td class="p-3">
+                            <button onclick="cancelReserva('${r.bedId}')" class="text-rose-400 hover:text-rose-300 font-semibold"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
